@@ -15,13 +15,19 @@ class Member(models.Model):
     joined_date = models.DateTimeField(auto_now_add=True)
 
 class HireforAdmin(models.Model):
+    STATUS_CHOICES = [
+        ('in_progress', 'อยู่ระหว่างการทำ'),
+        ('completed', 'ทำเสร็จสิ้นแล้ว'),
+        ('waiting_confirmation', 'รอการยืนยัน'),
+    ]
     HireA_ID = models.AutoField(primary_key=True)
     Width = models.FloatField(verbose_name="Width (m.)")
     Length = models.FloatField(verbose_name="Length (m.)")
     Height = models.FloatField(verbose_name="Height (m.)")
     Type = models.CharField(max_length=100)
     Budget = models.CharField(max_length=150)
-    Location = models.CharField(max_length=150)
+    Location = models.CharField(max_length=150, null=True)
+    Status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='waiting_confirmation', verbose_name="Status")
 
 class Hire(models.Model):
     STATUS_CHOICES = [
@@ -92,11 +98,11 @@ class Resource(models.Model):
     Nail_P = models.IntegerField(verbose_name="Nail (box.) Predict", default=0)
     Table_P = models.IntegerField(verbose_name="Table Predict", default=0)
     Chair_P = models.IntegerField(verbose_name="Chair Predict", default=0)
-    Wood = models.IntegerField(verbose_name="Wood (pc.) Actual", default=0)
-    Lighting = models.IntegerField(verbose_name="Lighting (pc.) Actual", default=0)
-    Nail = models.IntegerField(verbose_name="Nail (box.) Actual", default=0)
-    Table = models.IntegerField(verbose_name="Table Actual", default=0)
-    Chair = models.IntegerField(verbose_name="Chair Actual", default=0)
+    Wood = models.IntegerField(verbose_name="Wood (pc.) Actual", default=0, null=True)
+    Lighting = models.IntegerField(verbose_name="Lighting (pc.) Actual", default=0, null=True)
+    Nail = models.IntegerField(verbose_name="Nail (box.) Actual", default=0, null=True)
+    Table = models.IntegerField(verbose_name="Table Actual", default=0, null=True)
+    Chair = models.IntegerField(verbose_name="Chair Actual", default=0, null=True)
 
     def __str__(self):
         return f"Resource for PredictHire {self.Predict_ID.Predict_ID if self.Predict_ID else 'Unknown'}"
